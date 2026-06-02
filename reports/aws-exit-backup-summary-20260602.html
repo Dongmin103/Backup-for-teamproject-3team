@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>3team AWS Exit 백업 작업 요약</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --panel2: #172033;
+      --text: #e5e7eb;
+      --muted: #aeb7c8;
+      --line: #314158;
+      --accent: #38bdf8;
+      --ok: #22c55e;
+      --warn: #f59e0b;
+      --bad: #ef4444;
+      --chip: #1e293b;
+      --white: #ffffff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", Arial, sans-serif;
+      background: radial-gradient(circle at 20% 0%, #1e3a8a 0%, var(--bg) 35%, #020617 100%);
+      color: var(--text);
+      line-height: 1.65;
+    }
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 36px 20px 72px; }
+    header {
+      border: 1px solid rgba(148, 163, 184, .25);
+      border-radius: 24px;
+      padding: 34px;
+      background: linear-gradient(145deg, rgba(15,23,42,.88), rgba(30,41,59,.78));
+      box-shadow: 0 24px 80px rgba(0,0,0,.35);
+    }
+    h1 { margin: 0 0 10px; font-size: clamp(28px, 4vw, 46px); letter-spacing: -0.04em; }
+    h2 { margin: 42px 0 16px; font-size: 25px; letter-spacing: -0.02em; }
+    h3 { margin: 24px 0 10px; font-size: 18px; }
+    p { margin: 8px 0; }
+    a { color: #7dd3fc; }
+    .subtitle { color: var(--muted); font-size: 16px; max-width: 880px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+    .chip { background: rgba(56,189,248,.13); border: 1px solid rgba(56,189,248,.35); color: #dff7ff; padding: 7px 12px; border-radius: 999px; font-size: 13px; }
+    .grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 14px; margin-top: 22px; }
+    .card { background: rgba(17,24,39,.83); border: 1px solid rgba(148,163,184,.24); border-radius: 18px; padding: 18px; }
+    .metric { font-size: 28px; font-weight: 800; color: var(--white); letter-spacing: -0.03em; }
+    .label { color: var(--muted); font-size: 13px; }
+    .section { background: rgba(15,23,42,.72); border: 1px solid rgba(148,163,184,.18); border-radius: 22px; padding: 24px; margin-top: 18px; }
+    .two { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .status { display: inline-flex; align-items: center; gap: 8px; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+    .ok { background: rgba(34,197,94,.13); color: #bbf7d0; border: 1px solid rgba(34,197,94,.34); }
+    .warn { background: rgba(245,158,11,.13); color: #fde68a; border: 1px solid rgba(245,158,11,.34); }
+    .bad { background: rgba(239,68,68,.13); color: #fecaca; border: 1px solid rgba(239,68,68,.34); }
+    table { width: 100%; border-collapse: collapse; overflow: hidden; border-radius: 14px; font-size: 14px; }
+    th, td { border-bottom: 1px solid rgba(148,163,184,.18); padding: 12px 10px; vertical-align: top; }
+    th { text-align: left; color: #cbd5e1; background: rgba(30,41,59,.8); }
+    tr:last-child td { border-bottom: 0; }
+    code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+    code { background: rgba(15,23,42,.95); border: 1px solid rgba(148,163,184,.18); border-radius: 6px; padding: 1px 5px; }
+    pre { white-space: pre; overflow-x: auto; background: #020617; border: 1px solid rgba(148,163,184,.2); border-radius: 16px; padding: 18px; color: #dbeafe; font-size: 13px; line-height: 1.45; }
+    ul { margin-top: 8px; }
+    .note { color: var(--muted); font-size: 14px; }
+    .danger-box { border-left: 4px solid var(--warn); background: rgba(245,158,11,.08); padding: 14px 16px; border-radius: 12px; }
+    .footer { margin-top: 36px; color: var(--muted); font-size: 13px; text-align: center; }
+    @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } .two { grid-template-columns: 1fr; } }
+    @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } header { padding: 24px; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>3team AWS Exit 백업 작업 요약</h1>
+      <p class="subtitle">
+        AWS 계정 삭제에 대비해 3team StrokePredict 프로젝트의 GitHub-safe 문서 백업과 Google Drive private artifact 백업을 분리하여 정리한 최종 HTML 보고서입니다.
+        비밀값, API 키, 토큰, 실제 env 값은 포함하지 않았습니다.
+      </p>
+      <div class="chips">
+        <span class="chip">생성일: 2026-06-02 KST</span>
+        <span class="chip">AWS profile: say2-3team</span>
+        <span class="chip">AWS account: 666803869796</span>
+        <span class="chip">주 region: ap-northeast-2</span>
+        <span class="chip">Qwen ECR region: us-east-1</span>
+      </div>
+      <div class="grid">
+        <div class="card"><div class="metric">20.017 GiB</div><div class="label">Google Drive 최종 백업 크기</div></div>
+        <div class="card"><div class="metric">520</div><div class="label">Google Drive 오브젝트 수</div></div>
+        <div class="card"><div class="metric">8.953 GiB</div><div class="label">Qwen OCI 이미지 백업</div></div>
+        <div class="card"><div class="metric">0</div><div class="label">로컬 100MB 초과 잔여 백업 파일</div></div>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2>1. 현재 작업 결론</h2>
+      <table>
+        <thead><tr><th>항목</th><th>상태</th><th>근거/설명</th></tr></thead>
+        <tbody>
+          <tr><td>GitHub-safe 백업</td><td><span class="status ok">완료</span></td><td>문서, sanitized manifest, ASCII 구조도, 복원 runbook만 GitHub에 저장했습니다.</td></tr>
+          <tr><td>Google Drive private 백업</td><td><span class="status ok">완료</span></td><td>S3, Lambda zip, SageMaker artifact, Docker image, Qwen OCI, DynamoDB export 등을 Drive에 저장했습니다.</td></tr>
+          <tr><td>Qwen 재기동용 이미지</td><td><span class="status ok">완료</span></td><td>ECR Registry API로 OCI layout을 재구성했고, Drive 업로드 후 rclone check 성공. 로컬 9GB는 삭제했습니다.</td></tr>
+          <tr><td>S3 <code>athena_ready/</code></td><td><span class="status warn">제외</span></td><td>사용자 지시로 제외했습니다. 약 5.77 GiB.</td></tr>
+          <tr><td>RDS 실제 dump</td><td><span class="status warn">미완료/리스크</span></td><td>로컬에서 pg_dump 42회 시도했으나 private subnet/security group 접근 제한으로 성공 0건. 시도 로그와 메타데이터는 Drive에 저장했습니다.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2>2. GitHub에는 어떻게 저장되어 있나</h2>
+      <p>GitHub 저장소: <a href="https://github.com/Dongmin103/Backup-for-teamproject-3team">https://github.com/Dongmin103/Backup-for-teamproject-3team</a></p>
+      <p class="note">GitHub는 공개/공유 가능성을 고려해 <strong>민감하지 않은 문서와 sanitized manifest만</strong> 저장하는 위치입니다.</p>
+      <pre>Backup-for-teamproject-3team/
+├── README.md                              # 한글 전체 설명과 AWS 리소스 구조
+├── .env.example                           # 실제 값 없는 환경변수 예시
+├── docs/
+│   ├── architecture-ascii.md              # ASCII 아키텍처 위치 안내
+│   ├── local-portability.md               # AWS 없이 로컬 이식 방향
+│   ├── private-artifact-policy.md         # GitHub 제외/private 보관 정책
+│   └── resource-connections.md            # 리소스 연결관계 설명
+├── manifests/
+│   ├── aws-resource-manifest.sanitized.json
+│   ├── backup-size-estimate.json
+│   └── backup-size-estimate.md
+├── restore/
+│   └── restore-runbook.md                 # 복원 절차
+└── reports/
+    └── aws-exit-backup-summary-20260602.html  # 이 HTML 보고서</pre>
+      <h3>GitHub에 넣지 않은 것</h3>
+      <ul>
+        <li>DB dump, 원본/raw 데이터, PHI 가능 데이터</li>
+        <li>SageMaker/model artifact, Lambda zip, Docker image tar, Qwen image blobs</li>
+        <li>API key, password, token, secret value, 실제 <code>.env</code> 파일</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>3. Google Drive에는 어떻게 저장되어 있나</h2>
+      <p>Google Drive 백업 루트:</p>
+      <pre>gdrive:3team-aws-exit-backup-20260602/</pre>
+      <p class="note">Google Drive는 GitHub에 올리면 안 되는 private artifact/대용량 파일의 보관 위치입니다.</p>
+      <pre>3team-aws-exit-backup-20260602/
+├── config-secrets-metadata/      # Secrets/SSM 이름·메타데이터만, 값 제외
+├── db-state/                     # DB 관련 메타데이터/상태
+├── db-state-archive/             # DynamoDB export 등 DB 상태 아카이브
+├── docker-images/
+│   ├── backend/                  # ECS 백엔드 Docker 이미지 tar.gz
+│   └── qwen-oci-layout/          # Qwen SageMaker 재기동용 OCI 이미지 레이아웃
+├── lambda-zips/                  # Lambda 함수 zip 7개
+├── rds-dump-attempt/             # RDS pg_dump 시도 로그/매니페스트
+├── s3/
+│   └── say2-3team/               # S3 say2-3team, athena_ready 제외
+├── sagemaker-artifacts/          # SageMaker model/source tarballs
+└── final-report/                 # 최종 Markdown/HTML 보고서</pre>
+      <table>
+        <thead><tr><th>Drive 경로</th><th>내용</th><th>검증/비고</th></tr></thead>
+        <tbody>
+          <tr><td><code>s3/say2-3team/</code></td><td>S3 bucket 주요 prefix 백업. <code>athena_ready/</code> 제외.</td><td>rclone check 완료</td></tr>
+          <tr><td><code>lambda-zips/</code></td><td>Lambda 함수 zip 7개</td><td>업로드/검증/로컬 삭제 완료</td></tr>
+          <tr><td><code>sagemaker-artifacts/</code></td><td>SageMaker model/source tarballs 5개</td><td>업로드/검증/로컬 삭제 완료</td></tr>
+          <tr><td><code>docker-images/backend/</code></td><td>ECS 백엔드 Docker image tar.gz</td><td>업로드/검증/로컬 삭제 완료</td></tr>
+          <tr><td><code>docker-images/qwen-oci-layout/</code></td><td>Qwen 3.6 vLLM SageMaker 재생성용 OCI image layout</td><td>37개 오브젝트, 8.953 GiB, rclone check 성공</td></tr>
+          <tr><td><code>db-state-archive/</code></td><td>DynamoDB export 및 DB 상태 아카이브</td><td>DynamoDB 5개 테이블 export 완료</td></tr>
+          <tr><td><code>rds-dump-attempt/</code></td><td>RDS pg_dump 시도 결과와 매니페스트</td><td>실제 dump 성공 0건, 접근 제한 리스크 기록</td></tr>
+          <tr><td><code>config-secrets-metadata/</code></td><td>Secrets/SSM 이름과 구조 메타데이터</td><td>secret 값 제외</td></tr>
+          <tr><td><code>final-report/</code></td><td>최종 보고서 Markdown/HTML</td><td>이 문서 포함</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2>4. 리소스 연결 구조</h2>
+      <pre>사용자 / 브라우저
+      |
+      v
++-----------------------------+
+| CloudFront                  |
+| d1k8g7xdpghccc.cloudfront   |
++--------------+--------------+
+               |
+      +--------+------------------------------+
+      |                                       |
+      v                                       v
++------------------------+        +-------------------------------+
+| S3 frontend origin     |        | ALB API origin                |
+| s3://say2-3team/web/   |        | strokepredict-v4-alb          |
++------------------------+        +---------------+---------------+
+                                                  |
+                                                  v
+                                  +-------------------------------+
+                                  | ECS backend service           |
+                                  | strokepredict-v4-backend      |
+                                  | container port 8000           |
+                                  +-------+-----------------------+
+                                          |
+                    +---------------------+---------------------+
+                    |                                           |
+                    v                                           v
+      +-----------------------------+             +-----------------------------+
+      | Prediction API path         |             | RAG / DDI / PDF paths       |
+      | /api/predict                |             | guideline/ddi/report tools  |
+      +-------------+---------------+             +--------------+--------------+
+                    |                                            |
+                    v                                            v
+      +-----------------------------+             +-----------------------------+
+      | API Gateway /prod/predict   |             | Lambda / OpenSearch / DB    |
+      +-------------+---------------+             +--------------+--------------+
+                    |                                            |
+                    v                                            v
+      +-----------------------------+             +-----------------------------+
+      | Lambda pre-3team-orchestr.  |             | RDS / DynamoDB / Neptune    |
+      | SageMaker endpoint router   |             | DDI + patient state         |
+      +-------------+---------------+             +-----------------------------+
+                    |
+                    v
+      +-----------------------------+
+      | SageMaker endpoints         |
+      | model1/model2/model4/etc.   |
+      +-----------------------------+
+                    |
+                    v
+      +-----------------------------+
+      | Qwen restore pack           |
+      | Drive: docker-images/qwen   |
+      +-----------------------------+</pre>
+    </section>
+
+    <section class="section">
+      <h2>5. 복원할 때 먼저 볼 것</h2>
+      <div class="two">
+        <div class="card">
+          <h3>문서/구조 복원</h3>
+          <ol>
+            <li>GitHub repo를 clone합니다.</li>
+            <li><code>README.md</code>, <code>restore/restore-runbook.md</code>, <code>docs/local-portability.md</code>를 확인합니다.</li>
+            <li>민감값은 GitHub가 아니라 새 환경의 Secret Manager/환경변수에 다시 주입합니다.</li>
+          </ol>
+        </div>
+        <div class="card">
+          <h3>대용량 artifact 복원</h3>
+          <ol>
+            <li>Google Drive 백업 루트에서 필요한 artifact만 내려받습니다.</li>
+            <li>S3/RAG PDF/model artifact/Lambda zip/Docker image를 새 실행 환경에 맞게 배치합니다.</li>
+            <li>Qwen은 <code>skopeo</code>로 OCI layout에서 새 registry로 복사합니다.</li>
+          </ol>
+        </div>
+      </div>
+      <h3>Qwen 복원 예시</h3>
+      <pre>brew install skopeo
+rclone copy gdrive:3team-aws-exit-backup-20260602/docker-images/qwen-oci-layout ./qwen-oci-layout
+skopeo copy oci:./qwen-oci-layout:amd64-vllm-r4-awq32k docker://&lt;new-registry&gt;/sagemaker-qwen-vllm-v3:amd64-vllm-r4-awq32k</pre>
+    </section>
+
+    <section class="section">
+      <h2>6. 남은 리스크 / 추가로 해야 할 수 있는 일</h2>
+      <div class="danger-box">
+        <strong>가장 큰 리스크: RDS 실제 데이터 dump 미확보</strong>
+        <p>로컬에서 RDS endpoint 접근이 되지 않아 실제 PostgreSQL dump는 성공하지 못했습니다. AWS 계정 삭제 전 RDS 데이터가 중요하면 VPC 내부에서 dump 또는 snapshot export/share가 필요합니다.</p>
+      </div>
+      <ul>
+        <li><strong>RDS:</strong> VPC 내부 ECS/Lambda/bastion에서 <code>pg_dump</code>, 또는 snapshot export to S3, 또는 snapshot 타 계정 공유/복사 필요.</li>
+        <li><strong>로컬 이식:</strong> RAG는 <code>RAG_PDF</code>와 Drive의 <code>s3/say2-3team/rag-pdfs/</code> 기반으로 재구축 가능성이 높습니다.</li>
+        <li><strong>비밀값:</strong> 기존 AWS secret 값은 문서화하지 않았으므로 새 환경에서 별도 재발급/재입력해야 합니다.</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>7. 검증 증거</h2>
+      <table>
+        <thead><tr><th>검증 항목</th><th>결과</th></tr></thead>
+        <tbody>
+          <tr><td>Google Drive 전체 크기</td><td>20.017 GiB, 520 objects</td></tr>
+          <tr><td>Qwen OCI 원격 크기</td><td>8.953 GiB, 37 objects</td></tr>
+          <tr><td>Qwen rclone check</td><td>success</td></tr>
+          <tr><td>로컬 대용량 잔여 파일</td><td><code>.aws-exit-backup</code> 내 100MB 초과 파일 없음</td></tr>
+          <tr><td>최종 보고서 Drive 업로드</td><td><code>final-report/</code> 업로드 및 rclone check 완료</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <p class="footer">Generated by Codex for 3team AWS exit backup. Secret values intentionally omitted.</p>
+  </div>
+</body>
+</html>

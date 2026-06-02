@@ -19,6 +19,12 @@
 
 ---
 
+## 최종 HTML 백업 보고서
+
+- [3team AWS Exit 백업 작업 요약 HTML](reports/aws-exit-backup-summary-20260602.html)
+  - GitHub-safe 저장 구조와 Google Drive private artifact 저장 구조를 함께 정리한 최종 보고서입니다.
+  - 비밀값/API key/token/실제 `.env` 값은 포함하지 않습니다.
+
 ## 1. 이 저장소의 목적
 
 이 저장소의 목적은 다음과 같습니다.
