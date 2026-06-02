@@ -175,7 +175,6 @@
       "rag-pdfs/",
       "raw_data/",
       "neptune-bulk-load/",
-      "athena_ready/",
       "archive/"
     ],
     "size_estimate": [
@@ -231,7 +230,8 @@
         "prefix": "athena_ready/",
         "bytes": 6194713524,
         "human": "5.77 GiB",
-        "objects": 15
+        "objects": 15,
+        "backup_status": "excluded_by_user"
       },
       {
         "prefix": "archive/",
@@ -239,7 +239,13 @@
         "human": "1.00 MiB",
         "objects": 4
       }
-    ]
+    ],
+    "excluded_prefixes": [
+      "athena_ready/"
+    ],
+    "exclusion_reason": {
+      "athena_ready/": "User confirmed this prefix does not need to be backed up."
+    }
   },
   "stateful_resources": {
     "aurora_postgresql": [

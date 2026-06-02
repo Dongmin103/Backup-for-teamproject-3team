@@ -22,7 +22,7 @@ Generated from read-only local/AWS inventory checks.
 ## S3 prefix breakdown
 
 | Prefix | Objects | Size |
-|---|---:|---:|
+|---|---:|---:|---|
 | `web/` | 10 | 2.19 MiB |
 | `model/` | 17 | 126.52 MiB |
 | `lambda/` | 1 | 60.20 MiB |
@@ -31,13 +31,13 @@ Generated from read-only local/AWS inventory checks.
 | `rag-pdfs/` | 7 | 32.17 MiB |
 | `raw_data/` | 374 | 10.74 GiB |
 | `neptune-bulk-load/` | 4 | 9.80 KiB |
-| `athena_ready/` | 15 | 5.77 GiB |
+| `athena_ready/` | 15 | 5.77 GiB | **제외: 사용자 확인, 백업 불필요** |
 | `archive/` | 4 | 1.00 MiB |
 
 
 ## Practical disk budget
 - **Minimum GitHub-safe package**: likely < 50 MiB.
-- **Private S3 selected prefixes only**: about **16.73 GiB**.
+- **Private S3 selected prefixes only**: about **10.95 GiB** after excluding `athena_ready/`.
 - **Private S3 + ECR Docker save budget**: about **34.80 GiB**.
 - **With DB/search exports**: unknown; reserve extra **20–100+ GiB** depending on logical dump sizes.
 
@@ -45,3 +45,7 @@ Current 606 GiB free is enough for the known S3/ECR/Lambda/model backup estimate
 
 ## GitHub rule
 Do not push raw data, DB dumps, model artifacts, Lambda zips, Docker tarballs, secrets, or PHI-like data. Push only sanitized README/manifests/runbooks/templates.
+
+## Exclusions
+
+- `s3://say2-3team/athena_ready/` excluded by user confirmation; not required for backup. This reduces S3 private backup estimate by about **5.77 GiB**.
