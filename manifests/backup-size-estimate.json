@@ -1,0 +1,200 @@
+{
+  "s3": {
+    "say2-3team": [
+      {
+        "prefix": "web/",
+        "bytes": 2291463,
+        "human": "2.19 MiB",
+        "objects": 10
+      },
+      {
+        "prefix": "model/",
+        "bytes": 132662073,
+        "human": "126.52 MiB",
+        "objects": 17
+      },
+      {
+        "prefix": "lambda/",
+        "bytes": 63121804,
+        "human": "60.20 MiB",
+        "objects": 1
+      },
+      {
+        "prefix": "source/",
+        "bytes": 280487,
+        "human": "273.91 KiB",
+        "objects": 6
+      },
+      {
+        "prefix": "scripts/",
+        "bytes": 7782,
+        "human": "7.60 KiB",
+        "objects": 2
+      },
+      {
+        "prefix": "rag-pdfs/",
+        "bytes": 33734275,
+        "human": "32.17 MiB",
+        "objects": 7
+      },
+      {
+        "prefix": "raw_data/",
+        "bytes": 11533484715,
+        "human": "10.74 GiB",
+        "objects": 374
+      },
+      {
+        "prefix": "neptune-bulk-load/",
+        "bytes": 10034,
+        "human": "9.80 KiB",
+        "objects": 4
+      },
+      {
+        "prefix": "athena_ready/",
+        "bytes": 6194713524,
+        "human": "5.77 GiB",
+        "objects": 15
+      },
+      {
+        "prefix": "archive/",
+        "bytes": 1053110,
+        "human": "1.00 MiB",
+        "objects": 4
+      }
+    ]
+  },
+  "ecr": [
+    {
+      "repository": "strokepredict-v4-backend",
+      "tag": "v4-backend-qwen-summary-vpce-20260527T1605KST",
+      "region": "ap-northeast-2",
+      "bytes": 88706517,
+      "human": "84.60 MiB",
+      "digest": "sha256:fec06e4c04bcca777fdf5c3488ab89d85625ef7cf88698fb8fdcdbb9af11a883"
+    },
+    {
+      "repository": "sagemaker-qwen-vllm-v3",
+      "tag": "amd64-vllm-r4-awq32k",
+      "region": "us-east-1",
+      "bytes": 9612693196,
+      "human": "8.95 GiB",
+      "digest": "sha256:312c43db4b38c87d11822af7423e731cc9b9f5c99a179d7747730b863327d93d"
+    }
+  ],
+  "lambda": {
+    "functions": [
+      {
+        "name": "pre-guideline-answer-lambda-3team",
+        "bytes": 2939497,
+        "human": "2.80 MiB",
+        "runtime": "python3.12",
+        "handler": "packages.rag.lambda_handlers.guideline_answer_handler.lambda_handler"
+      },
+      {
+        "name": "pre-3team-orchestrator",
+        "bytes": 5662,
+        "human": "5.53 KiB",
+        "runtime": "python3.12",
+        "handler": "handler.lambda_handler"
+      },
+      {
+        "name": "stroke-ddi-check",
+        "bytes": 19904636,
+        "human": "18.98 MiB",
+        "runtime": "python3.12",
+        "handler": "handler.lambda_handler"
+      },
+      {
+        "name": "strokepredict-icu-predictor",
+        "bytes": 4222,
+        "human": "4.12 KiB",
+        "runtime": "python3.11",
+        "handler": "icu_lambda_handler.lambda_handler"
+      },
+      {
+        "name": "strokepredict-guideline-llm",
+        "bytes": 3786,
+        "human": "3.70 KiB",
+        "runtime": "python3.12",
+        "handler": "lambda_function.lambda_handler"
+      },
+      {
+        "name": "strokepredict-pdf-generator",
+        "bytes": 13841,
+        "human": "13.52 KiB",
+        "runtime": "python3.11",
+        "handler": "lambda_handler.lambda_handler"
+      },
+      {
+        "name": "say2-3team-ddi-schema-runner",
+        "bytes": 73980,
+        "human": "72.25 KiB",
+        "runtime": "python3.12",
+        "handler": "lambda_function.lambda_handler"
+      }
+    ],
+    "total_bytes": 22945624,
+    "total_human": "21.88 MiB"
+  },
+  "sagemaker_model_artifacts": [
+    {
+      "uri": "s3://sagemaker-ap-northeast-2-666803869796/sagemaker-scikit-learn-2026-04-24-00-49-28-790/sourcedir.tar.gz",
+      "bytes": 1286548,
+      "human": "1.23 MiB"
+    },
+    {
+      "uri": "s3://sagemaker-ap-northeast-2-666803869796/sagemaker-xgboost-2026-04-23-09-11-06-765/sourcedir.tar.gz",
+      "bytes": 1212,
+      "human": "1.18 KiB"
+    },
+    {
+      "uri": "s3://sagemaker-ap-northeast-2-666803869796/stroke-mimic-v5/model_only.tar.gz",
+      "bytes": 317340,
+      "human": "309.90 KiB"
+    },
+    {
+      "uri": "s3://say2-2team-bucket/Phase_2/models/soonet/model_v5.tar.gz",
+      "error": {
+        "__raw__": "\nAn error occurred (404) when calling the HeadObject operation: Not Found\n",
+        "__cmd__": "aws --profile say2-3team --region ap-northeast-2 s3api head-object --bucket say2-2team-bucket --key Phase_2/models/soonet/model_v5.tar.gz --output json"
+      }
+    },
+    {
+      "uri": "s3://say2-3team/model/ensemble/model.tar.gz",
+      "bytes": 264639,
+      "human": "258.44 KiB"
+    },
+    {
+      "uri": "s3://say2-3team/model/mimic_hosp_icu/model.tar.gz",
+      "bytes": 233281,
+      "human": "227.81 KiB"
+    }
+  ],
+  "local": {
+    ".": {
+      "bytes": 22885187584,
+      "human": "21.31 GiB"
+    },
+    "RAG_PDF": {
+      "bytes": 1195266048,
+      "human": "1.11 GiB"
+    },
+    ".tmp/aws-inventory": {
+      "bytes": 1044480,
+      "human": "1020.00 KiB"
+    },
+    ".omx/plans": {
+      "bytes": 2654208,
+      "human": "2.53 MiB"
+    },
+    ".aws-exit-backup": {
+      "bytes": 4096,
+      "human": "4.00 KiB"
+    }
+  },
+  "notes": [
+    "DB dump size cannot be exactly known without exporting; rough upper bound from allocated/storage metadata can be much larger than logical dump. RDS/Neptune/OpenSearch should be estimated separately before export.",
+    "Docker save may be larger than ECR compressed image size; budget ~1.5-2x ECR size for local tar files.",
+    "S3 sync local size will be close to object bytes; versioned historical objects may add more if versions are downloaded."
+  ]
+}

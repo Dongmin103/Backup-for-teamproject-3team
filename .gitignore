@@ -1,0 +1,19 @@
+# Private/off-Git artifacts
+private/
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.parquet
+*.csv
+*.pkl
+*.pt
+*.pth
+*.onnx
+*.db
+*.sqlite
+*.pem
+*.key
+.env
+.env.*
+!.env.example

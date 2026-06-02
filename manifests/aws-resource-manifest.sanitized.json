@@ -1,0 +1,303 @@
+{
+  "generated_at_utc": "2026-06-02T04:46:07Z",
+  "source_account_profile": "say2-3team",
+  "source_account_id": "666803869796",
+  "primary_region": "ap-northeast-2",
+  "qwen_region": "us-east-1",
+  "sanitization_policy": {
+    "included": [
+      "resource names",
+      "routes",
+      "public/service endpoints",
+      "image tags/digests",
+      "artifact URIs",
+      "sizes",
+      "environment variable names only"
+    ],
+    "excluded": [
+      "secret values",
+      "API keys",
+      "passwords",
+      "DB dumps",
+      "raw data",
+      "PHI-like data",
+      "model binaries",
+      "lambda zip bytes",
+      "docker image tarballs"
+    ]
+  },
+  "cloudfront": {
+    "distribution_id": "E7XQCFWDVFK4G",
+    "domain": "d1k8g7xdpghccc.cloudfront.net",
+    "origins": [
+      {
+        "id": "say2-3team-web",
+        "type": "s3",
+        "domain": "say2-3team.s3.ap-northeast-2.amazonaws.com",
+        "origin_path": "/web"
+      },
+      {
+        "id": "strokepredict-v4-alb",
+        "type": "alb",
+        "domain": "strokepredict-v4-alb-437058920.ap-northeast-2.elb.amazonaws.com"
+      }
+    ],
+    "behaviors": [
+      {
+        "path": "default",
+        "target": "say2-3team-web"
+      },
+      {
+        "path": "/api/*",
+        "target": "strokepredict-v4-alb"
+      },
+      {
+        "path": "/health",
+        "target": "strokepredict-v4-alb"
+      },
+      {
+        "path": "/healthz",
+        "target": "strokepredict-v4-alb"
+      }
+    ]
+  },
+  "ecs_backend": {
+    "cluster": "stroke-agent-api-http2-cluster",
+    "included_service": "strokepredict-v4-backend-service",
+    "excluded_service": "stroke-agent-api-http2-service",
+    "task_definition": "strokepredict-v4-backend:13",
+    "container": "strokepredict-v4-backend",
+    "port": 8000,
+    "ecr_image": "666803869796.dkr.ecr.ap-northeast-2.amazonaws.com/strokepredict-v4-backend:v4-backend-qwen-summary-vpce-20260527T1605KST",
+    "environment_keys": [
+      "AGENT_RUNTIME",
+      "PORT",
+      "AWS_REGION",
+      "ORCHESTRATOR_URL",
+      "GUIDELINE_ANSWER_LAMBDA_FUNCTION_NAME",
+      "GUIDELINE_ANSWER_LAMBDA_QUALIFIER",
+      "QWEN_ENDPOINT_NAME",
+      "QWEN_ENDPOINT_REGION"
+    ]
+  },
+  "prediction_path": {
+    "backend_route": "/api/predict",
+    "api_gateway": "strokepredict-orchestrator-api / prod / predict",
+    "api_gateway_id": "7o6kyw9542",
+    "lambda": "pre-3team-orchestrator",
+    "sagemaker_endpoints_included": [
+      "analysis-0409-unified-api-ep-20260422-0305",
+      "mimic-hosp-icu-endpoint",
+      "strokepredict-v5-endpoint",
+      "stroke-ensemble-endpoint"
+    ],
+    "sagemaker_endpoints_excluded": [
+      "say2-1team-clinsight-prediction",
+      "say2-2team-soonet-endpoint"
+    ]
+  },
+  "lambda_functions": [
+    {
+      "name": "pre-guideline-answer-lambda-3team",
+      "role": "Guideline RAG answer",
+      "runtime": "python3.12",
+      "handler": "packages.rag.lambda_handlers.guideline_answer_handler.lambda_handler",
+      "env_keys_only": [
+        "GUIDELINE_RAG_OPENSEARCH_ENDPOINT",
+        "GUIDELINE_RAG_OPENSEARCH_INDEX",
+        "RAG_EMBEDDING_PROVIDER",
+        "GUIDELINE_ANSWER_*",
+        "OPENAI_API_KEY"
+      ]
+    },
+    {
+      "name": "pre-3team-orchestrator",
+      "role": "Prediction endpoint router",
+      "runtime": "python3.12",
+      "handler": "handler.lambda_handler",
+      "env_keys_only": [
+        "EP_KNHANES",
+        "EP_ICU",
+        "EP_MIMIC",
+        "EP_IST",
+        "REGION"
+      ]
+    },
+    {
+      "name": "stroke-ddi-check",
+      "role": "DDI/drug interaction check",
+      "runtime": "python3.12",
+      "handler": "handler.lambda_handler",
+      "env_keys_only": [
+        "API_KEY_SECRET_ID",
+        "AUTH_ENABLED",
+        "CACHE_BACKEND",
+        "DYNAMODB_TABLE_CACHE",
+        "DYNAMODB_TABLE_MED",
+        "NEPTUNE_ENDPOINT",
+        "RDS_SECRET_ARN"
+      ]
+    },
+    {
+      "name": "strokepredict-icu-predictor",
+      "role": "ICU predictor helper",
+      "runtime": "python3.11",
+      "handler": "icu_lambda_handler.lambda_handler"
+    },
+    {
+      "name": "strokepredict-guideline-llm",
+      "role": "Legacy/simple guideline LLM",
+      "runtime": "python3.12",
+      "handler": "lambda_function.lambda_handler"
+    },
+    {
+      "name": "strokepredict-pdf-generator",
+      "role": "PDF report generator",
+      "runtime": "python3.11",
+      "handler": "lambda_handler.lambda_handler"
+    },
+    {
+      "name": "say2-3team-ddi-schema-runner",
+      "role": "DDI schema runner/initializer",
+      "runtime": "python3.12",
+      "handler": "lambda_function.lambda_handler"
+    }
+  ],
+  "s3": {
+    "primary_bucket": "say2-3team",
+    "versioning": "Enabled",
+    "critical_prefixes": [
+      "web/",
+      "model/",
+      "lambda/",
+      "source/",
+      "scripts/",
+      "rag-pdfs/",
+      "raw_data/",
+      "neptune-bulk-load/",
+      "athena_ready/",
+      "archive/"
+    ],
+    "size_estimate": [
+      {
+        "prefix": "web/",
+        "bytes": 2291463,
+        "human": "2.19 MiB",
+        "objects": 10
+      },
+      {
+        "prefix": "model/",
+        "bytes": 132662073,
+        "human": "126.52 MiB",
+        "objects": 17
+      },
+      {
+        "prefix": "lambda/",
+        "bytes": 63121804,
+        "human": "60.20 MiB",
+        "objects": 1
+      },
+      {
+        "prefix": "source/",
+        "bytes": 280487,
+        "human": "273.91 KiB",
+        "objects": 6
+      },
+      {
+        "prefix": "scripts/",
+        "bytes": 7782,
+        "human": "7.60 KiB",
+        "objects": 2
+      },
+      {
+        "prefix": "rag-pdfs/",
+        "bytes": 33734275,
+        "human": "32.17 MiB",
+        "objects": 7
+      },
+      {
+        "prefix": "raw_data/",
+        "bytes": 11533484715,
+        "human": "10.74 GiB",
+        "objects": 374
+      },
+      {
+        "prefix": "neptune-bulk-load/",
+        "bytes": 10034,
+        "human": "9.80 KiB",
+        "objects": 4
+      },
+      {
+        "prefix": "athena_ready/",
+        "bytes": 6194713524,
+        "human": "5.77 GiB",
+        "objects": 15
+      },
+      {
+        "prefix": "archive/",
+        "bytes": 1053110,
+        "human": "1.00 MiB",
+        "objects": 4
+      }
+    ]
+  },
+  "stateful_resources": {
+    "aurora_postgresql": [
+      "patient-db-cluster",
+      "patient-db-instance-1"
+    ],
+    "rds_postgresql": [
+      "pre-rds-2-3-team-ddi"
+    ],
+    "neptune": [
+      "pre-neptune-2-3-team-ddi"
+    ],
+    "dynamodb": [
+      "say2-3team-ddi-drugs",
+      "say2-3team-ddi-pairs",
+      "stroke_ddi_drugs",
+      "stroke_ddi_pairs",
+      "strokepredict-icu-patients"
+    ],
+    "opensearch": [
+      "pre-os-rag-smoke-3team"
+    ],
+    "redis": [
+      "pre-redis-2-3-team-ddi"
+    ]
+  },
+  "qwen_restore_pack": {
+    "endpoint": "qwen36awq32k-vllm-endpoint",
+    "current_status": "deleted/not found at planning time",
+    "model": "qwen36awq32k-vllm-model",
+    "endpoint_config": "qwen36awq32k-vllm-endpoint-config",
+    "instance_type": "ml.g6e.2xlarge",
+    "ecr_image": "666803869796.dkr.ecr.us-east-1.amazonaws.com/sagemaker-qwen-vllm-v3:amd64-vllm-r4-awq32k",
+    "digest": "sha256:312c43db4b38c87d11822af7423e731cc9b9f5c99a179d7747730b863327d93d",
+    "served_model_name": "cyankiwi/Qwen3.6-27B-AWQ-INT4",
+    "runtime_env_keys_only": [
+      "SAGEMAKER_BIND_PORT",
+      "VLLM_MODEL_ID",
+      "SERVED_MODEL_NAME",
+      "VLLM_MAX_MODEL_LEN",
+      "VLLM_MAX_NUM_SEQS",
+      "VLLM_GPU_MEMORY_UTILIZATION",
+      "VLLM_ENFORCE_EAGER",
+      "VLLM_ENABLE_AUTO_TOOL_CHOICE",
+      "VLLM_TOOL_CALL_PARSER",
+      "VLLM_TRUST_REMOTE_CODE",
+      "VLLM_LANGUAGE_MODEL_ONLY"
+    ]
+  },
+  "local_rag_source": {
+    "path": "RAG_PDF/",
+    "approx_local_size": "1.11 GiB",
+    "important_files": [
+      "RAG_PDF/chunks_v2/child_chunks.jsonl",
+      "RAG_PDF/markdown/*.md",
+      "RAG_PDF/structured/*.docling.json",
+      "RAG_PDF/aws/create_index.py",
+      "RAG_PDF/aws/embed_and_index.py"
+    ]
+  }
+}
